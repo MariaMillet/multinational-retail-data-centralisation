@@ -1,6 +1,7 @@
 import yaml
 import sqlalchemy as db
-from sqlalchemy import create_engine, engine_from_config, URL, inspect
+from sqlalchemy import create_engine, engine_from_config, inspect
+from sqlalchemy.engine import URL
 
 
 class DatabaseConnector:
@@ -30,7 +31,15 @@ class DatabaseConnector:
         inspector = inspect(engine)
         return inspector.get_table_names()
     
-    def upload_to_db(self, df, table_name, engine):
+    def upload_to_db(self, df, table_name):
+        DATABASE_TYPE = 'postgresql'
+        DBAPI = 'psycopg2'
+        HOST = 'localhost'
+        USER = 'postgres'
+        PASSWORD = 'AiCore'
+        DATABASE = 'Sales_Data'
+        PORT = 5432
+        engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
         df.to_sql(table_name, engine, if_exists='replace')
     
 
